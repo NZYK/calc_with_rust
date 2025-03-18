@@ -28,4 +28,24 @@ module CalcWithRust
       num_arr.each_index.select { |i| num_arr[i] }
     end
   end
+
+  module Rust
+    require 'ffi'
+
+    extend FFI::Library
+    ffi_lib File.expand_path('../rust/calculator/target/release/libcalculator.dylib', __dir__)
+    attach_function :calc_primes, %i[size_t pointer], :pointer
+    attach_function :free_primes_array, %i[pointer size_t], :void
+
+    def self.primes(n)
+      out_len_ptr = FFI::MemoryPointer.new(:size_t)
+      out_ptr = calc_primes(n, out_len_ptr)
+
+      len = out_len_ptr.read_ulong
+      primes_array = out_ptr.read_array_of_ulong(len)
+
+      free_primes_array(out_ptr, len)
+      primes_array
+    end
+  end
 end
