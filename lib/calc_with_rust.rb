@@ -6,7 +6,7 @@ module CalcWithRust
   class Error < StandardError; end
 
   module Ruby
-    # 素数探索：エラトステネスの篩
+    # 素数探索：エラトステネスのふるい
     def self.primes(n)
       return [] if n < 2
 
@@ -32,10 +32,16 @@ module CalcWithRust
   module Rust
     require 'ffi'
 
+    RUST_DIR = File.expand_path('../rust/calculator', __dir__)
+    RUST_LIB_FILE_NAME = case RUBY_PLATFORM
+                         when /darwin/ then 'libcalculator.dylib'
+                         when /win32|mingw/ then 'libcalculator.dll'
+                         else 'libcalculator.so'
+                         end
+    RUST_LIB_FILE_PATH = File.join(RUST_DIR, 'target', 'release', RUST_LIB_FILE_NAME)
+
     extend FFI::Library
-    ffi_lib File.expand_path('../rust/calculator/target/release/libcalculator.dylib', __dir__)
-    attach_function :calc_primes, %i[size_t pointer], :pointer
-    attach_function :free_primes_array, %i[pointer size_t], :void
+    ffi_lib RUST_LIB_FILE_PATH
 
     def self.primes(n)
       out_len_ptr = FFI::MemoryPointer.new(:size_t)
@@ -47,5 +53,10 @@ module CalcWithRust
       free_primes_array(out_ptr, len)
       primes_array
     end
+
+    private
+
+    attach_function :calc_primes, %i[size_t pointer], :pointer
+    attach_function :free_primes_array, %i[pointer size_t], :void
   end
 end
