@@ -6,6 +6,6 @@
 /pkg/
 /spec/reports/
 /tmp/
-
+/rust/calculator/target/
 # rspec failure tracking
 .rspec_status
