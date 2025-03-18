@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'mkmf'
-require './lib/calc_with_rust'
+require_relative 'lib/calc_with_rust.rb'
 
 # cargoの存在チェック
 abort 'Error: cargoが見つかりません。cargoがインストールされているか確認してください。' unless find_executable('cargo')
