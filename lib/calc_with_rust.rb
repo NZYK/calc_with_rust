@@ -49,7 +49,7 @@ module CalcWithRust
 
     private
 
-    attach_function :calc_primes, %i[size_t pointer], :pointer
-    attach_function :free_primes_array, %i[pointer size_t], :void
+    attach_function :calc_primes, %i[uint64 pointer], :pointer
+    attach_function :free_primes_array, %i[pointer uint64], :void
   end
 end
