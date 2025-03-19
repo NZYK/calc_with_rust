@@ -12,6 +12,7 @@ Gem::Specification.new do |spec|
   spec.description = "this gem provides a simple calculate method using Rust binary. It's uses FFI to call Rust binary from Ruby."
   spec.homepage = 'https://github.com/NZYK/calc_with_rust'
   spec.license = 'MIT'
+  spec.extensions = ['extconf.rb']
   spec.required_ruby_version = '>= 3.0.0'
 
   spec.metadata['allowed_push_host'] = 'https://rubygems.org'

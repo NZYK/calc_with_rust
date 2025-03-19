@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'calc_with_rust/version'
+require_relative 'calc_with_rust/rust_lib_conf'
 
 module CalcWithRust
   class Error < StandardError; end
@@ -32,16 +33,8 @@ module CalcWithRust
   module Rust
     require 'ffi'
 
-    RUST_DIR = File.expand_path('../rust/calculator', __dir__)
-    RUST_LIB_FILE_NAME = case RUBY_PLATFORM
-                         when /darwin/ then 'libcalculator.dylib'
-                         when /win32|mingw/ then 'libcalculator.dll'
-                         else 'libcalculator.so'
-                         end
-    RUST_LIB_FILE_PATH = File.join(RUST_DIR, 'target', 'release', RUST_LIB_FILE_NAME)
-
     extend FFI::Library
-    ffi_lib RUST_LIB_FILE_PATH
+    ffi_lib CalcWithRust::RustLibConf::RUST_LIB_FILE_PATH
 
     def self.primes(n)
       out_len_ptr = FFI::MemoryPointer.new(:size_t)
